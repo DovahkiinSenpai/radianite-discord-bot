@@ -1,29 +1,36 @@
+#pylint: disable=line-too-long, missing-module-docstring, missing-final-newline
 #import 
-from multiprocessing.connection import wait
 from pdb import Restart
+from userids import *
+from lists import *
 import random
 import time
-import string
 from datetime import datetime
 from timeit import repeat
 import discord
 import subprocess 
 from secretinfo import token
+from discord.ext import commands, tasks
+from discord.ext.commands import Bot
+from discord.ext import commands
+import asyncio
 
-datetime.now(tz=None)
-# Returns a datetime object containing the local date and time
-dateTimeObj = datetime.now()
-
-#random lists
-homos = ['zach', 'josh', 'kael', 'konnar', 'geezer', 'ethan', 'roo']
-loves = ['hewwo cutie! - boyfriend', 'insert distracting but adorable message here', 'blep :3', 'i wuv uuuuuu', ':3', 'o3o', 'boop! *~*']
-exits = ["Please don't leave, there's more demons to toast!", "Just leave. When you come back, I'll be waiting with a bat. ", "This is no exit message! Message intentionally left blank.", "I'LL FORMAT YOUR HARD-DRIVE IF YOU QUIT NOW"]
+bot = commands.Bot(command_prefix="r!")
 
 client = discord.Client()
 
 @client.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Doin' Your Mom/r!help"))
+    print('Welcome user. Bot logged in as {0.user}'.format(client))
+    
+    # Setting `Playing ` status (activity=discord.Game(name="a game"))
+
+    # Setting `Streaming ` status (activity=discord.Streaming(name="My Stream", url=my_twitch_url))
+   
+    # Setting `Listening ` status (activity=discord.Activity(type=discord.ActivityType.listening, name="Doin' Your Mom"))
+    
+    # Setting `Watching ` status (activity=discord.Activity(type=discord.ActivityType.watching, name="a movie"))
 
 @client.event
 async def on_message(message):
@@ -43,35 +50,43 @@ async def on_message(message):
         await message.channel.send('ping balls')
 
     if message.content.startswith('r!homo'):
-        await message.channel.send(random.choice(homos))
+        await message.channel.send(f"{random.choice(homos)} is a homo")
 
-    #Replies to messages 
-    if message.author.id == 244858366373920778: #ethan
-        if random.randint(1,20) < 7:
-            await message.channel.send(",':)")
-            print('fucking owned ethan at', dateTimeObj.hour, ':', dateTimeObj.minute, ':', dateTimeObj.second)
-            repeat
-
-    if message.author.id == 591027923624919050: #Rae
-        if random.randint(1,20) < 10:
-            await message.channel.send(random.choice(loves))
-            print('<3 messaged da gf at', dateTimeObj.hour, ':', dateTimeObj.minute, ':', dateTimeObj.second)
-            repeat
-    
-    #killswitch        
-    if message.author.id == 244858366373920778: #Me, of course
+    if message.content.startswith('r!deletetest'):
+            msg = await message.channel.send(f"{message.author.mention},’:)")
+            time.sleep(2)
+            Restart
+            await msg.delete()
+         
+    if message.author.id == me: #killswitch
         if message.content.startswith('r!killswitch'):
             await message.channel.send(random.choice(exits))
             await message.channel.send('https://cdn.discordapp.com/attachments/836674086348128278/942350630406721546/dcja6sq-200ea72c-19d4-4d32-b858-bebf193aa17a.gif')
             exit()
-    
-    #restart
-    if message.author.id == 244858366373920778: #Me, of course
-        if message.content.startswith('r!restart'):
-            await message.channel.send("Restarting the bot in 5 seconds, please wait...")
-            await message.channel.send('https://i.gifer.com/SjyG.gif')
-            print('Restarting the bot')
-            time.sleep(5)
-            Restart
+
+    #Replies to when certain members speak 
+    if message.author.id == ethan: 
+        if random.randint(1,100) < 3:
+            msg = await message.channel.send(f"{message.author.mention},’:) https://tenor.com/view/troll-trolled-trollge-troll-success-gif-22597471")
+            time.sleep(4)
+            await msg.delete()
+            datetime.now(tz=None)
+            dateTimeObj = datetime.now() 
+            print("ratio'd ethan at", dateTimeObj.hour, ':', dateTimeObj.minute, ':', dateTimeObj.second)
+            repeat
+
+    if message.author.id == zach: 
+        if random.randint(1,100) < 3:
+            await message.channel.send(random.choice(gatos))
+            datetime.now(tz=None)
+            dateTimeObj = datetime.now() 
+            print("gato'd zach at", dateTimeObj.hour, ':', dateTimeObj.minute, ':', dateTimeObj.second)
+            repeat
+
+    if message.author.id == rae:
+        if random.randint(1,30) < 2:
+            await message.channel.send(random.choice(loves))
+            print('<3 messaged da gf at', dateTimeObj.hour, ':', dateTimeObj.minute, ':', dateTimeObj.second)
+            repeat
 
 client.run(token)
